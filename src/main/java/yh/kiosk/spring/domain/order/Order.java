@@ -16,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import yh.kiosk.spring.domain.orderproduct.OrderProduct;
@@ -40,8 +41,9 @@ public class Order {
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
 	private List<OrderProduct> orderProducts = new ArrayList<>();
 
-	public Order(List<Product> products, LocalDateTime registerDateTime) {
-		this.orderStatus = OrderStatus.INIT;
+	@Builder
+	private Order(List<Product> products, OrderStatus orderStatus, LocalDateTime registerDateTime) {
+		this.orderStatus = orderStatus;
 		this.totalPrice = calculateTotalPrice(products);
 		this.registerDateTime = registerDateTime;
 		this.orderProducts = products.stream()
@@ -50,12 +52,20 @@ public class Order {
 	}
 
 	public static Order create(List<Product> products, LocalDateTime registerDateTime) {
-		return new Order(products, registerDateTime);
+		return Order.builder()
+			.products(products)
+			.orderStatus(OrderStatus.INIT)
+			.registerDateTime(registerDateTime)
+			.build();
 	}
 
 	private static int calculateTotalPrice(List<Product> products) {
 		return products.stream()
 			.mapToInt(Product::getPrice)
 			.sum();
+	}
+
+	public void changeOrderStatus(OrderStatus orderStatus) {
+		this.orderStatus = orderStatus;
 	}
 }
