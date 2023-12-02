@@ -30,5 +30,4 @@ public class ProductController {
 	public ApiResponse<List<ProductResponse>> getSellingProducts() {
 		return ApiResponse.ok(productService.getSellingProducts());
 	}
-
 }

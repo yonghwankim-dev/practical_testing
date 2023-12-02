@@ -92,7 +92,7 @@ class CafeKioskTest {
 		Order order = cafeKiosk.createOrder();
 		// then
 		Assertions.assertThat(order.getBeverages()).hasSize(1);
-		Assertions.assertThat(order.getBeverages().get(0)).isEqualTo(americano);
+		Assertions.assertThat(order.getBeverages().get(0).getName()).isEqualTo("아메리카노");
 	}
 
 	@Test

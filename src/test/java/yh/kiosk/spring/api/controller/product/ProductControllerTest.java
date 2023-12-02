@@ -10,29 +10,14 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.MockMvc;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
+import yh.kiosk.spring.ControllerTestSupport;
 import yh.kiosk.spring.api.controller.product.dto.request.ProductCreateRequest;
-import yh.kiosk.spring.api.service.product.ProductService;
 import yh.kiosk.spring.api.service.product.response.ProductResponse;
 import yh.kiosk.spring.domain.product.ProductSellingStatus;
 import yh.kiosk.spring.domain.product.ProductType;
 
-@WebMvcTest(controllers = ProductController.class)
-public class ProductControllerTest {
-	@Autowired
-	private MockMvc mockMvc;
-
-	@MockBean
-	private ProductService productService;
-
-	@Autowired
-	private ObjectMapper objectMapper;
+public class ProductControllerTest extends ControllerTestSupport {
 
 	@DisplayName("신규 상품을 등록한다")
 	@Test
@@ -122,6 +107,7 @@ public class ProductControllerTest {
 		ProductCreateRequest request = ProductCreateRequest.builder()
 			.type(ProductType.HANDMADE)
 			.sellingStatus(ProductSellingStatus.SELLING)
+			.name("아메리카노")
 			.price(0)
 			.build();
 		// when // then
@@ -151,7 +137,7 @@ public class ProductControllerTest {
 			.andExpect(jsonPath("$.message").value("OK"))
 			.andExpect(jsonPath("$.data").isArray());
 	}
-	
+
 }
 
 

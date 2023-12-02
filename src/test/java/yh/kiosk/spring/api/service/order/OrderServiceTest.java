@@ -12,9 +12,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
+import yh.kiosk.spring.IntegrationTestSupport;
 import yh.kiosk.spring.api.controller.order.request.OrderCreateRequest;
 import yh.kiosk.spring.api.service.order.response.OrderResponse;
 import yh.kiosk.spring.domain.order.OrderRepository;
@@ -25,9 +24,7 @@ import yh.kiosk.spring.domain.product.ProductType;
 import yh.kiosk.spring.domain.stock.Stock;
 import yh.kiosk.spring.domain.stock.StockRepository;
 
-@ActiveProfiles("test")
-@SpringBootTest
-class OrderServiceTest {
+class OrderServiceTest extends IntegrationTestSupport {
 	@Autowired
 	private OrderService orderService;
 
@@ -164,8 +161,9 @@ class OrderServiceTest {
 		Product product3 = createProduct(HANDMADE, "003", 5000);
 		productRepository.saveAll(List.of(product1, product2, product3));
 
-		Stock stock1 = Stock.create("001", 1);
-		Stock stock2 = Stock.create("002", 1);
+		Stock stock1 = Stock.create("001", 2);
+		Stock stock2 = Stock.create("002", 2);
+		stock1.deductQuantity(1);
 		stockRepository.saveAll(List.of(stock1, stock2));
 
 		OrderCreateRequest request = OrderCreateRequest.builder()
